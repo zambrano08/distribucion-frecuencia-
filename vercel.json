@@ -6,13 +6,13 @@
     }
   ],
   "routes": [
-   {
-   "src": "/api/(.*)",
-   "dest": "main_estadistica.py"
-   },
+    {
+      "src": "/api/(.*)",
+      "dest": "main_estadistica.py"
+    },
     {
       "src": "/(.*)",
-      "dest": "/frontend/$1"
+      "dest": "frontend/$1"
     }
   ]
 }
