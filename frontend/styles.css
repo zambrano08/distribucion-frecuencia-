@@ -125,7 +125,7 @@ th {
     padding: 1rem 1.25rem;
     color: var(--primary-light);
     font-size: 0.75rem;
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: 0.1em;
     font-weight: 700;
     border-bottom: 1px solid var(--border);
