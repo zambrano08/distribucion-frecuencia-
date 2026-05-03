@@ -35,8 +35,8 @@ function mostrarTabla(filas) {
         tr.innerHTML = `
             <td>${fila.dato}</td>
             <td>${fila.fi}</td>
-            <td>${fila.Fi}</td>
             <td>${fila.ni}</td>
+            <td>${fila.Fi}</td>
             <td>${fila.Ni}</td>
         `;
         cuerpo.appendChild(tr);
