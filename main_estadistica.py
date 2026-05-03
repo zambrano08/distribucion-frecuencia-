@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from Estadistica_logic import procesador_estadistico_web 
 
 app = Flask(__name__, 
+            static_url_path='', 
             static_folder='frontend', 
             template_folder='frontend')
 

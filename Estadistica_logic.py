@@ -25,9 +25,9 @@ def procesador_estadistico_web(datos_entrada):
             tabla_final.append({
                 "dato": v,
                 "fi": fi,
-                "FI": acum_f,
+                "Fi": acum_f,
                 "ni": round(ni, 4),
-                "NI": round(acum_n, 4)
+                "Ni": round(acum_n, 4)
             })
             
         return tabla_final
