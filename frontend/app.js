@@ -1,29 +1,3 @@
-async function procesarEstadistica() {
-    const inputData = document.getElementById('datosInput').value;
-    
-    if (!inputData) {
-        alert("Por favor ingresa algunos datos");
-        return;
-    }
-
-    // Enviamos los datos al backend (Flask)
-    const response = await fetch('/api/calcular', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ datos: inputData })
-    });
-
-    const data = await response.json();
-
-    if (data) {
-        mostrarTabla(data);
-    } else {
-        alert("Error al procesar los datos");
-    }
-}
-
 function mostrarTabla(filas) {
     const cuerpo = document.getElementById('tablaCuerpo');
     const area = document.getElementById('resultadoArea');
@@ -32,6 +6,7 @@ function mostrarTabla(filas) {
     
     filas.forEach(fila => {
         const tr = document.createElement('tr');
+        // Aquí usamos las claves que vienen de estadistica.py (fi, Fi, ni, Ni)
         tr.innerHTML = `
             <td>${fila.dato}</td>
             <td>${fila.fi}</td>
@@ -42,5 +17,5 @@ function mostrarTabla(filas) {
         cuerpo.appendChild(tr);
     });
 
-    area.style.display = "block"; // Mostrar la tabla
+    area.style.display = "block"; 
 }
