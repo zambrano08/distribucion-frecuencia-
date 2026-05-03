@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadística Pro</title>
+    <!-- Importación de la fuente del Conversor -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Distribución de Frecuencias</h1>
+        <p>Ingresa tus datos separados por comas (ej: 10, 20, 10, 30)</p>
+        
+        <div class="input-group">
+            <input type="text" id="datosInput" placeholder="Ej: rojo, azul, rojo...">
+            <button onclick="procesarEstadistica()">Calcular</button>
+        </div>
+
+        <div id="resultadoArea" style="display:none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dato</th>
+                        <th>fi</th>
+                        <th>Fi</th>
+                        <th>ni</th>
+                        <th>Ni</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCuerpo"></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
