@@ -8,11 +8,8 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/api/calcular",
       "dest": "main_estadistica.py"
-    },
-    {
-      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
