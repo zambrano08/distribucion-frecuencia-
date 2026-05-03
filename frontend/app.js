@@ -6,13 +6,14 @@ function mostrarTabla(filas) {
     
     filas.forEach(fila => {
         const tr = document.createElement('tr');
-        // Aquí usamos las claves que vienen de estadistica.py (fi, Fi, ni, Ni)
+        
+        // Ajustado para que coincida con tus nombres en mayúsculas (FI y NI)
         tr.innerHTML = `
             <td>${fila.dato}</td>
             <td>${fila.fi}</td>
-            <td>${fila.Fi}</td>
+            <td>${fila.FI}</td> 
             <td>${fila.ni}</td>
-            <td>${fila.Ni}</td>
+            <td>${fila.NI}</td>
         `;
         cuerpo.appendChild(tr);
     });
