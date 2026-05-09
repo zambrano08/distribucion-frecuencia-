@@ -17,17 +17,14 @@ def procesador_estadistico_web(datos_entrada):
         
         for v in valores_ordenados:
             fi = conteo[v]
-            acum_f += fi
-            ni = fi / n_total
-            acum_n += ni
-            
-            # Guardamos cada fila como un objeto
-            tabla_final.append({
-                "dato": v,
-                "fi": fi,
-                "Fi": acum_f,
-                "ni": round(ni, 4),
-                "Ni": round(acum_n, 4)
+        ni = fi / n_total
+        acum_n += ni
+        
+        # Guardamos cada fila como un objeto
+        tabla_final.append({
+            "dato": v,
+            "fi": fi,
+            "Fi": fi,
             })
             
         return tabla_final

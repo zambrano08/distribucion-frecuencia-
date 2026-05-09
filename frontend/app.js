@@ -111,11 +111,9 @@ function calcularFrecuenciasManual(datos) {
         return String(a.dato).localeCompare(String(b.dato), 'es');
     });
 
-    let acum_f = 0;
     let acum_n = 0;
 
     return filas.map(fila => {
-        acum_f += fila.fi;
         const ni = fila.fi / total;
         acum_n += ni;
 
@@ -123,7 +121,7 @@ function calcularFrecuenciasManual(datos) {
             dato: fila.dato,
             fi: fila.fi,
             ni: ni.toFixed(4),
-            Fi: acum_f,
+            Fi: fila.fi,
             Ni: acum_n.toFixed(4)
         };
     });
@@ -150,12 +148,11 @@ function mostrarResultados(filas) {
 
 function actualizarTotales(filas) {
     const totalFi = filas.reduce((suma, fila) => suma + Number(fila.fi || 0), 0);
-    const totalNi = filas.reduce((suma, fila) => suma + Number(fila.ni || 0), 0);
     const totalFiCumulada = filas.reduce((suma, fila) => suma + Number(fila.Fi || 0), 0);
-    const totalNiCumulada = filas.reduce((suma, fila) => suma + Number(fila.Ni || 0), 0);
+    const totalNi = filas.length > 0 ? Number(filas[filas.length - 1].Ni || 0) : 0;
 
     document.getElementById('total-fi').textContent = totalFi;
     document.getElementById('total-ni').textContent = totalNi.toFixed(4);
     document.getElementById('total-Fi').textContent = totalFiCumulada;
-    document.getElementById('total-Ni').textContent = totalNiCumulada.toFixed(4);
+    document.getElementById('total-Ni').textContent = totalNi.toFixed(4);
 }
