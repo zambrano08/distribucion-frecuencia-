@@ -175,6 +175,10 @@ tfoot th {
     border-top: 1px solid var(--border);
 }
 
+.hidden {
+    display: none;
+}
+
 tr:last-child td {
     border-bottom: none;
 }

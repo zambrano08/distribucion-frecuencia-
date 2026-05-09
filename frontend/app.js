@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function procesarEstadistica() {
     const manualData = obtenerDatosDesdeTabla();
-    const inputData = document.getElementById('datosInput').value.trim();
 
     if (manualData.length > 0) {
         const resultado = calcularFrecuenciasManual(manualData);
@@ -13,27 +12,7 @@ async function procesarEstadistica() {
         return;
     }
 
-    if (!inputData) {
-        alert('Por favor ingresa datos en la tabla o en el campo de texto.');
-        return;
-    }
-
-    // Si no hay datos manuales, enviamos la cadena al backend.
-    const response = await fetch('/api/calcular', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ datos: inputData })
-    });
-
-    const data = await response.json();
-
-    if (data) {
-        mostrarResultados(data);
-    } else {
-        alert('Error al procesar los datos');
-    }
+    alert('Por favor ingresa datos en la tabla antes de calcular.');
 }
 
 function crearTablaInicial(filas) {
@@ -144,6 +123,7 @@ function mostrarResultados(filas) {
     });
 
     actualizarTotales(filas);
+    document.getElementById('footer-totales').classList.remove('hidden');
 }
 
 function actualizarTotales(filas) {

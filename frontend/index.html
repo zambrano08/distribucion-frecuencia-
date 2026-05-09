@@ -14,7 +14,6 @@
         <p>Rellena los valores de <strong>Dato</strong> y <strong>fi</strong> directamente en la tabla, luego presiona <strong>Calcular</strong>.</p>
         
         <div class="input-group">
-            <input type="text" id="datosInput" placeholder="O utiliza datos separados por comas (ej: 10,20,10,30)">
             <button onclick="procesarEstadistica()">Calcular</button>
         </div>
 
@@ -33,7 +32,7 @@
                     </tr>
                 </thead>
                 <tbody id="tablaCuerpo"></tbody>
-                <tfoot>
+                <tfoot id="footer-totales" class="hidden">
                     <tr>
                         <th>Total</th>
                         <th id="total-fi">0</th>
