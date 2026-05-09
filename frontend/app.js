@@ -30,7 +30,7 @@ async function procesarEstadistica() {
     const data = await response.json();
 
     if (data) {
-        mostrarResultados(data, true);
+        mostrarResultados(data);
     } else {
         alert('Error al procesar los datos');
     }
@@ -129,59 +129,19 @@ function calcularFrecuenciasManual(datos) {
     });
 }
 
-function mostrarResultados(filas, desdeBackend = false) {
+function mostrarResultados(filas) {
     const cuerpo = document.getElementById('tablaCuerpo');
+    cuerpo.innerHTML = '';
 
-    if (desdeBackend) {
-        cuerpo.innerHTML = '';
-        filas.forEach(fila => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="text" class="dato-input" value="${fila.dato}"></td>
-                <td><input type="number" class="fi-input" value="${fila.fi}"></td>
-                <td><span class="ni-cell">${fila.ni}</span></td>
-                <td><span class="Fi-cell">${fila.Fi}</span></td>
-                <td><span class="Ni-cell">${fila.Ni}</span></td>
-            `;
-            cuerpo.appendChild(tr);
-        });
-        return;
-    }
-
-    const filasTabla = Array.from(cuerpo.querySelectorAll('tr'));
-    filasTabla.forEach((fila, index) => {
-        const datoInput = fila.querySelector('.dato-input');
-        const fiInput = fila.querySelector('.fi-input');
-        const niCell = fila.querySelector('.ni-cell');
-        const FiCell = fila.querySelector('.Fi-cell');
-        const NiCell = fila.querySelector('.Ni-cell');
-
-        if (filas[index]) {
-            datoInput.value = filas[index].dato;
-            fiInput.value = filas[index].fi;
-            niCell.textContent = filas[index].ni;
-            FiCell.textContent = filas[index].Fi;
-            NiCell.textContent = filas[index].Ni;
-        } else {
-            datoInput.value = '';
-            fiInput.value = '';
-            niCell.textContent = '';
-            FiCell.textContent = '';
-            NiCell.textContent = '';
-        }
+    filas.forEach(fila => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><input type="text" class="dato-input" value="${fila.dato}"></td>
+            <td><input type="number" class="fi-input" value="${fila.fi}"></td>
+            <td><span class="ni-cell">${fila.ni}</span></td>
+            <td><span class="Fi-cell">${fila.Fi}</span></td>
+            <td><span class="Ni-cell">${fila.Ni}</span></td>
+        `;
+        cuerpo.appendChild(tr);
     });
-
-    if (filas.length > filasTabla.length) {
-        for (let i = filasTabla.length; i < filas.length; i++) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="text" class="dato-input" value="${filas[i].dato}"></td>
-                <td><input type="number" class="fi-input" value="${filas[i].fi}"></td>
-                <td><span class="ni-cell">${filas[i].ni}</span></td>
-                <td><span class="Fi-cell">${filas[i].Fi}</span></td>
-                <td><span class="Ni-cell">${filas[i].Ni}</span></td>
-            `;
-            cuerpo.appendChild(tr);
-        }
-    }
 }
