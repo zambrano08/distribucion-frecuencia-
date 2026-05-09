@@ -1,12 +1,24 @@
+document.addEventListener('DOMContentLoaded', () => {
+    crearTablaInicial(6);
+    document.getElementById('agregarFilaBtn').addEventListener('click', () => crearFilaEnTabla());
+});
+
 async function procesarEstadistica() {
-    const inputData = document.getElementById('datosInput').value;
-    
-    if (!inputData) {
-        alert("Por favor ingresa algunos datos");
+    const manualData = obtenerDatosDesdeTabla();
+    const inputData = document.getElementById('datosInput').value.trim();
+
+    if (manualData.length > 0) {
+        const resultado = calcularFrecuenciasManual(manualData);
+        mostrarResultados(resultado);
         return;
     }
 
-    // Enviamos los datos al backend (Flask)
+    if (!inputData) {
+        alert('Por favor ingresa datos en la tabla o en el campo de texto.');
+        return;
+    }
+
+    // Si no hay datos manuales, enviamos la cadena al backend.
     const response = await fetch('/api/calcular', {
         method: 'POST',
         headers: {
@@ -18,29 +30,158 @@ async function procesarEstadistica() {
     const data = await response.json();
 
     if (data) {
-        mostrarTabla(data);
+        mostrarResultados(data, true);
     } else {
-        alert("Error al procesar los datos");
+        alert('Error al procesar los datos');
     }
 }
 
-function mostrarTabla(filas) {
+function crearTablaInicial(filas) {
     const cuerpo = document.getElementById('tablaCuerpo');
-    const area = document.getElementById('resultadoArea');
-    
-    cuerpo.innerHTML = ""; // Limpiar tabla anterior
-    
-    filas.forEach(fila => {
+    cuerpo.innerHTML = '';
+
+    for (let i = 0; i < filas; i++) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${fila.dato}</td>
-            <td>${fila.fi}</td>
-            <td>${fila.ni}</td>
-            <td>${fila.Fi}</td>
-            <td>${fila.Ni}</td>
+            <td><input type="text" class="dato-input" placeholder="Dato"></td>
+            <td><input type="number" class="fi-input" min="0" step="1" placeholder="fi"></td>
+            <td><span class="ni-cell"></span></td>
+            <td><span class="Fi-cell"></span></td>
+            <td><span class="Ni-cell"></span></td>
         `;
         cuerpo.appendChild(tr);
+    }
+}
+
+function crearFilaEnTabla() {
+    const cuerpo = document.getElementById('tablaCuerpo');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td><input type="text" class="dato-input" placeholder="Dato"></td>
+        <td><input type="number" class="fi-input" min="0" step="1" placeholder="fi"></td>
+        <td><span class="ni-cell"></span></td>
+        <td><span class="Fi-cell"></span></td>
+        <td><span class="Ni-cell"></span></td>
+    `;
+    cuerpo.appendChild(tr);
+}
+
+function obtenerDatosDesdeTabla() {
+    const filas = Array.from(document.querySelectorAll('#tablaCuerpo tr'));
+    const datos = [];
+
+    filas.forEach(fila => {
+        const datoInput = fila.querySelector('.dato-input');
+        const fiInput = fila.querySelector('.fi-input');
+        const dato = datoInput.value.trim();
+        const fi = fiInput.value.trim();
+
+        if (dato !== '' && fi !== '') {
+            const fiNumero = Number(fi);
+            if (!Number.isNaN(fiNumero) && fiNumero >= 0) {
+                datos.push({ dato, fi: fiNumero });
+            }
+        }
     });
 
-    area.style.display = "block"; // Mostrar la tabla
+    return datos;
+}
+
+function calcularFrecuenciasManual(datos) {
+    const conteo = {};
+    let total = 0;
+
+    datos.forEach(({ dato, fi }) => {
+        const clave = dato.trim();
+        conteo[clave] = (conteo[clave] || 0) + fi;
+        total += fi;
+    });
+
+    if (total === 0) {
+        return [];
+    }
+
+    const filas = Object.keys(conteo).map(dato => ({ dato, fi: conteo[dato] }));
+    const valoresNumericos = filas.every(f => !Number.isNaN(Number(f.dato)));
+
+    filas.sort((a, b) => {
+        if (valoresNumericos) {
+            return Number(a.dato) - Number(b.dato);
+        }
+        return String(a.dato).localeCompare(String(b.dato), 'es');
+    });
+
+    let acum_f = 0;
+    let acum_n = 0;
+
+    return filas.map(fila => {
+        acum_f += fila.fi;
+        const ni = fila.fi / total;
+        acum_n += ni;
+
+        return {
+            dato: fila.dato,
+            fi: fila.fi,
+            ni: ni.toFixed(4),
+            Fi: acum_f,
+            Ni: acum_n.toFixed(4)
+        };
+    });
+}
+
+function mostrarResultados(filas, desdeBackend = false) {
+    const cuerpo = document.getElementById('tablaCuerpo');
+
+    if (desdeBackend) {
+        cuerpo.innerHTML = '';
+        filas.forEach(fila => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" class="dato-input" value="${fila.dato}"></td>
+                <td><input type="number" class="fi-input" value="${fila.fi}"></td>
+                <td><span class="ni-cell">${fila.ni}</span></td>
+                <td><span class="Fi-cell">${fila.Fi}</span></td>
+                <td><span class="Ni-cell">${fila.Ni}</span></td>
+            `;
+            cuerpo.appendChild(tr);
+        });
+        return;
+    }
+
+    const filasTabla = Array.from(cuerpo.querySelectorAll('tr'));
+    filasTabla.forEach((fila, index) => {
+        const datoInput = fila.querySelector('.dato-input');
+        const fiInput = fila.querySelector('.fi-input');
+        const niCell = fila.querySelector('.ni-cell');
+        const FiCell = fila.querySelector('.Fi-cell');
+        const NiCell = fila.querySelector('.Ni-cell');
+
+        if (filas[index]) {
+            datoInput.value = filas[index].dato;
+            fiInput.value = filas[index].fi;
+            niCell.textContent = filas[index].ni;
+            FiCell.textContent = filas[index].Fi;
+            NiCell.textContent = filas[index].Ni;
+        } else {
+            datoInput.value = '';
+            fiInput.value = '';
+            niCell.textContent = '';
+            FiCell.textContent = '';
+            NiCell.textContent = '';
+        }
+    });
+
+    if (filas.length > filasTabla.length) {
+        for (let i = filasTabla.length; i < filas.length; i++) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" class="dato-input" value="${filas[i].dato}"></td>
+                <td><input type="number" class="fi-input" value="${filas[i].fi}"></td>
+                <td><span class="ni-cell">${filas[i].ni}</span></td>
+                <td><span class="Fi-cell">${filas[i].Fi}</span></td>
+                <td><span class="Ni-cell">${filas[i].Ni}</span></td>
+            `;
+            cuerpo.appendChild(tr);
+        }
+    }
 }
