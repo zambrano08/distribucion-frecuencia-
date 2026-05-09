@@ -149,8 +149,6 @@ function mostrarResultados(filas) {
 }
 
 function actualizarTotales(filas) {
-    const valoresDato = filas.map(fila => Number(fila.dato)).filter(valor => !Number.isNaN(valor));
-    const totalDato = valoresDato.length === filas.length ? valoresDato.reduce((suma, valor) => suma + valor, 0) : '—';
     const totalFi = filas.reduce((suma, fila) => suma + Number(fila.fi || 0), 0);
     const totalNi = filas.reduce((suma, fila) => suma + Number(fila.ni || 0), 0);
     const totalFiCumulada = filas.reduce((suma, fila) => suma + Number(fila.Fi || 0), 0);
@@ -160,5 +158,4 @@ function actualizarTotales(filas) {
     document.getElementById('total-ni').textContent = totalNi.toFixed(4);
     document.getElementById('total-Fi').textContent = totalFiCumulada;
     document.getElementById('total-Ni').textContent = totalNiCumulada.toFixed(4);
-    document.getElementById('total-dato').textContent = totalDato;
 }
